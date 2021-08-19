@@ -1,29 +1,28 @@
 --[[
-    GD50 2018
-    Pong Remake
+    Autor: Tiago Henrique
+    tiagohs.dev@gmail.com
 
-    pong-4
-    "The Ball Update"
+    Exercício do curso de desenvolvimento de jogos
+    CS50 - Instrutor Colton Ogden - cogden@cd50.harvard.edu
 
-    -- Main Program --
+    Originalmente programado Nolan Bushnell e Ted Dabney
+    na forma de console ligado a um monitor movido a fichas,
+    "Pong" foi o primeiro game lucrativo da história dando
+    origem a fundação da empresa Atari, em 1972 e a um novo
+    setor da industria.
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
+    O game em duas dimensões, simula tênis de mesa onde dois
+    jogadores têm o objetivo de mandar a bola além da borda do
+    seu oponente. Vence o primeiro a marcar 10 pontos.
 
-    Originally programmed by Atari in 1972. Features two
-    paddles, controlled by players, with the goal of getting
-    the ball past your opponent's edge. First to 10 points wins.
-
-    This version is built to more closely resemble the NES than
-    the original Pong machines or the Atari 2600 in terms of
-    resolution, though in widescreen (16:9) so it looks nicer on
-    modern systems.
-]]
-
--- push is a library that will allow us to draw our game at a virtual
--- resolution, instead of however large our window is; used to provide
--- a more retro aesthetic
---
+    Esta versão é construída para se parecer mais com o NES do que
+    as máquinas Pong originais ou o Atari 2600 em termos de
+    resolução, embora em widescreen (16: 9) para que fique mais
+    bonito em sistemas modernos.
+    ]] --
+-- push é uma biblioteca que nos permite desenhar o jogo em um ambiente virtual
+-- resolução, em vez do "tamanho" da janela;
+-- usado para uma estética mais retrô
 -- https://github.com/Ulydev/push
 push = require 'push'
 
@@ -33,146 +32,112 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT = 243
 
--- speed at which we will move our paddle; multiplied by dt in update
 PADDLE_SPEED = 200
 
---[[
-    Runs when the game first starts up, only once; used to initialize the game.
-]]
 function love.load()
-  love.graphics.setDefaultFilter('nearest', 'nearest')
+    love.graphics.setDefaultFilter('nearest', 'nearest')
 
-  -- "seed" the RNG so that calls to random are always random
-  -- use the current time, since that will vary on startup every time
-  math.randomseed(os.time())
+    -- "semeando" (ou propagando) o RNG para que a chamadas sejão sempre aleatóreas.
+    -- use a hora atual, uma vez que irá variar a cada inicialização.
+    math.randomseed(os.time())
 
-  -- more "retro-looking" font object we can use for any text
-  smallFont = love.graphics.newFont('font.ttf', 8)
+    smallFont = love.graphics.newFont('font.ttf', 8)
 
-  -- set LÖVE2D's active font to the smallFont obect
-  love.graphics.setFont(smallFont)
+    love.graphics.setFont(smallFont)
 
-  -- initialize window with virtual resolution
-  push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
-    fullscreen = false,
-    resizable = false,
-    vsync = true
-  })
+    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,
+                     {fullscreen = false, resizable = false, vsync = true})
 
-  -- paddle positions on the Y axis (they can only move up or down)
-  player1Y = 30
-  player2Y = VIRTUAL_HEIGHT - 50
+    player1Y = 3
+    player2Y = VIRTUAL_HEIGHT - 50
 
-  -- velocity and position variables for our ball when play starts
-  ballX = VIRTUAL_WIDTH / 2 - 2
-  ballY = VIRTUAL_HEIGHT / 2 - 2
+    -- variáveis de velocidade e posição para a bola quando o jogo iniciar.
+    ballX = VIRTUAL_WIDTH / 2 - 2
+    ballY = VIRTUAL_HEIGHT / 2 - 2
 
-  -- math.random returns a random value between the left and right number
-  ballDX = math.random(2) == 1 and 100 or - 100
-  ballDY = math.random(-50, 50)
+    -- math.random retorna um valor aleatório entre os numeros esquerdo e direito.
+    ballDX = math.random(2) == 1 and 100 or -100
+    ballDY = math.random(-50, 50)
 
-  -- game state variable used to transition between different parts of the game
-  -- (used for beginning, menus, main game, high score list, etc.)
-  -- we will use this to determine behavior during render and update
-  gameState = 'start'
+    -- variável de estado do jogo usada para fazer a transição entre as diferentes partes do jogo
+    -- (usado para início, menus, jogo principal, pontuação, etc.). 
+    -- vamos usar isso para determinar o comportamento durante a renderização e atualização. 
+    gameState = 'start'
 end
 
---[[
-    Runs every frame, with "dt" passed in, our delta in seconds
-    since the last frame, which LÖVE2D supplies us.
-]]
 function love.update(dt)
-  -- player 1 movement
-  if love.keyboard.isDown('w') then
-    -- add negative paddle speed to current Y scaled by deltaTime
-    -- now, we clamp our position between the bounds of the screen
-    -- math.max returns the greater of two values; 0 and player Y
-    -- will ensure we don't go above it
-    player1Y = math.max(0, player1Y + - PADDLE_SPEED * dt)
-  elseif love.keyboard.isDown('s') then
-    -- add positive paddle speed to current Y scaled by deltaTime
-    -- math.min returns the lesser of two values; bottom of the egde minus paddle height
-    -- and player Y will ensure we don't go below it
-    player1Y = math.min(VIRTUAL_HEIGHT - 20, player1Y + PADDLE_SPEED * dt)
-  end
-
-  -- player 2 movement
-  if love.keyboard.isDown('up') then
-    -- add negative paddle speed to current Y scaled by deltaTime
-    player2Y = math.max(0, player2Y + - PADDLE_SPEED * dt)
-  elseif love.keyboard.isDown('down') then
-    -- add positive paddle speed to current Y scaled by deltaTime
-    player2Y = math.min(VIRTUAL_HEIGHT - 20, player2Y + PADDLE_SPEED * dt)
-  end
-
-  -- update our ball based on its DX and DY only if we're in play state;
-  -- scale the velocity by dt so movement is framerate-independent
-  if gameState == 'play' then
-    ballX = ballX + ballDX * dt
-    ballY = ballY + ballDY * dt
-  end
-end
-
---[[
-    Keyboard handling, called by LÖVE2D each frame;
-    passes in the key we pressed so we can access.
-]]
-function love.keypressed(key)
-  -- keys can be accessed by string name
-  if key == 'escape' then
-    -- function LÖVE gives us to terminate application
-    love.event.quit()
-    -- if we press enter during the start state of the game, we'll go into play mode
-    -- during play mode, the ball will move in a random direction
-  elseif key == 'enter' or key == 'return' then
-    if gameState == 'start' then
-      gameState = 'play'
-    else
-      gameState = 'start'
-
-      -- start ball's position in the middle of the screen
-      ballX = VIRTUAL_WIDTH / 2 - 2
-      ballY = VIRTUAL_HEIGHT / 2 - 2
-
-      -- given ball's x and y velocity a random starting value
-      -- the and/or pattern here is Lua's way of accomplishing a ternary operation
-      -- in other programming languages like C
-      ballDX = math.random(2) == 1 and 100 or - 100
-      ballDY = math.random(-50, 50) * 1.5
+    if love.keyboard.isDown('w') then
+        -- adicionar velocidade negativa ao eixo Y atual escalonado por deltaTime
+        -- agora, fixamos nossa posição entre os limites da tela
+        -- math.max retorna o maior de dois valores; 0 e player Y
+        -- irá garantir que não vamos acima disso
+        player1Y = math.max(0, player1Y + -PADDLE_SPEED * dt)
+    elseif love.keyboard.isDown('s') then
+        -- adicionar velocidade positiva ao eixo Y atual escalonado por deltaTime
+        -- math.min retorna o menor de dois valores; parte inferior do limite menos a altura da raquete.
+        -- e o jogador Y irá garantir que não vamos abaixo dele
+        player1Y = math.min(VIRTUAL_HEIGHT - 20, player1Y + PADDLE_SPEED * dt)
     end
-  end
-end
 
---[[
-    Called after update by LÖVE2D, used to draw anything to the screen,
-    updated or otherwise.
-]]
-function love.draw()
-  -- begin rendering at virtual resolution
-  push:apply('start')
+    if love.keyboard.isDown('up') then
+        player2Y = math.max(0, player2Y + -PADDLE_SPEED * dt)
+    elseif love.keyboard.isDown('down') then
+        player2Y = math.min(VIRTUAL_HEIGHT - 20, player2Y + PADDLE_SPEED * dt)
+    end
 
-  -- clear the screen with a specific color; in this case, a color similar
-  -- to some versions of the original Pong
-  love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
+    -- Atualizei a bola com base em seu DX e DY somente se estivermos em estado "play"
+    -- Dimensiono a velocidade por dt para que o movimento seja independente da taxa de quadros. 
+    if gameState == 'play' then
+        ballX = ballX + ballDX * dt
+        ballY = ballY + ballDY * dt
+    end
 
-  -- draw different things based on the state of the game
-  love.graphics.setFont(smallFont)
+    function love.keypressed(key)
+        if key == 'escape' then
+            love.event.quit()
 
-  if gameState == 'start' then
-    love.graphics.printf('Hello Start State!', 0, 20, VIRTUAL_WIDTH, 'center')
-  else
-    love.graphics.printf('Hello Play State!', 0, 20, VIRTUAL_WIDTH, 'center')
-  end
+            -- se pressionarmos Enter durante o estado inicial do jogo, entraremos no modo "play" 
+            -- durante esse modo, a bola se moverá em uma direção aleatória. 
 
-  -- render first paddle (left side), now using the players' Y variable
-  love.graphics.rectangle('fill', 10, player1Y, 5, 20)
+        elseif key == 'enter' or key == 'return' then
+            if gameState == 'start' then
+                gameState = 'play'
+            else
+                gameState = 'start'
 
-  -- render second paddle (right side)
-  love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20)
+                -- Inicialize a bola no meio da tela
+                ballX = VIRTUAL_WIDTH / 2 - 2
+                ballY = VIRTUAL_HEIGHT / 2 - 2
+                -- dada a velocidade x e y da bola, um valor inicial aleatório.
+                -- o padrão e/ou (and or) aqui é a maneira de Lua de realizar uma operação ternária
+                -- em outras linguagens de programação como C seria ? :.
+                ballDX = math.random(2) == 1 and 100 or -100
+                ballDY = math.random(-50, 50) * 1.5
+            end
+        end
+    end
 
-  -- render ball (center)
-  love.graphics.rectangle('fill', ballX, ballY, 4, 4)
+    function love.draw()
+        push:apply('start')
 
-  -- end rendering at virtual resolution
-  push:apply('end')
+        love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
+
+        love.graphics.setFont(smallFont)
+
+        if gameState == 'start' then
+            love.graphics.printf('Hello Start State!', 0, 20, VIRTUAL_WIDTH,
+                                 'center')
+        else
+            love.graphics.printf('Hello Play State!', 0, 20, VIRTUAL_WIDTH,
+                                 'center')
+        end
+
+        love.graphics.rectangle('fill', 10, player1Y, 5, 20)
+
+        love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20)
+
+        love.graphics.rectangle('fill', ballX, ballY, 4, 4)
+
+        push:apply('end')
+    end
 end
