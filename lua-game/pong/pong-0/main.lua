@@ -1,48 +1,44 @@
 --[[
-    GD50 2018
-    Pong Remake
+    Autor: Tiago Henrique
+    tiagohs.dev@gmail.com
 
-    pong-0
-    "The Day-0 Update"
+    Exercício do curso de desenvolvimento de jogos
+    CS50 - Instrutor Colton Ogden - cogden@cd50.harvard.edu
 
-    -- Main Program --
+    Originalmente programado Nolan Bushnell e Ted Dabney
+    na forma de console ligado a um monitor movido a fichas,
+    "Pong" foi o primeiro game lucrativo da história dando
+    origem a fundação da empresa Atari, em 1972 e a um novo
+    setor da industria.
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
+    O game em duas dimensões, simula tênis de mesa onde dois
+    jogadores têm o objetivo de mandar a bola além da borda do
+    seu oponente. Vence o primeiro a marcar 10 pontos.
 
-    Originally programmed by Atari in 1972. Features two
-    paddles, controlled by players, with the goal of getting
-    the ball past your opponent's edge. First to 10 points wins.
-
-    This version is built to more closely resemble the NES than
-    the original Pong machines or the Atari 2600 in terms of
-    resolution, though in widescreen (16:9) so it looks nicer on 
-    modern systems.
-]]
-
-WINDOW_WIDTH = 1280 -- constantes visíveis para todo app
+    Esta versão é construída para se parecer mais com o NES do que
+    as máquinas Pong originais ou o Atari 2600 em termos de
+    resolução, embora em widescreen (16: 9) para que fique mais
+    bonito em sistemas modernos.]] --
+WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
 --[[
-    Runs when the game first starts up, only once; used to initialize the game.
-]]
+   É executado quando o jogo é iniciado pela primeira vez, apenas uma vez;  usado para inicializar o jogo.]] --
 function love.load()
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false, -- Não será tela cheia
-        resizable = false,  -- Não será redimensionável
-        vsync = true        -- Mas será sincroniszado com a taxa de atuaização do monitor.
-                            -- Vsync = Sincronização vertical    
+        resizable = false, -- Não será redimensionável
+        vsync = true -- Mas será sincroniszado com a taxa de atuaização do monitor.
     })
 end
 
 --[[
-    Called after update by LÖVE2D, used to draw anything to the screen, updated or otherwise.
-]]
+    Chamado após a atualização por LÖVE2D, usado para desenhar qualquer coisa na tela.
+]] --
 function love.draw()
-    love.graphics.printf(
-        'Hello Pong!',          -- text to render
-        0,                      -- starting X (0 since we're going to center it based on width)
-        WINDOW_HEIGHT / 2 - 6,  -- starting Y (halfway down the screen)
-        WINDOW_WIDTH,           -- number of pixels to center within (the entire screen here)
-        'center')               -- alignment mode, can be 'center', 'left', or 'right'
+    love.graphics.printf('Hello Pong!', -- texto a renderizar
+    0, -- começando com X (0, pois vamos centralizá-lo com base na largura)
+    WINDOW_HEIGHT / 2 - 6, -- começando em  Y (na metade da tela)
+    WINDOW_WIDTH, -- número de pixels para centralizar (a tela inteira aqui)
+    'center') -- modo de alinhamento, pode ser 'center', 'left', ou 'right'
 end

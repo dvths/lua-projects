@@ -1,31 +1,30 @@
 --[[
-    GD50 2018
-    Pong Remake
+    Autor: Tiago Henrique
+    tiagohs.dev@gmail.com
 
-    pong-1
-    "The Low-Res Update"
+    Exercício do curso de desenvolvimento de jogos
+    CS50 - Instrutor Colton Ogden - cogden@cd50.harvard.edu
 
-    -- Main Program --
+    Originalmente programado Nolan Bushnell e Ted Dabney
+    na forma de console ligado a um monitor movido a fichas,
+    "Pong" foi o primeiro game lucrativo da história dando
+    origem a fundação da empresa Atari, em 1972 e a um novo
+    setor da industria.
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
+    O game em duas dimensões, simula tênis de mesa onde dois
+    jogadores têm o objetivo de mandar a bola além da borda do
+    seu oponente. Vence o primeiro a marcar 10 pontos.
 
-    Originally programmed by Atari in 1972. Features two
-    paddles, controlled by players, with the goal of getting
-    the ball past your opponent's edge. First to 10 points wins.
-
-    This version is built to more closely resemble the NES than
-    the original Pong machines or the Atari 2600 in terms of
-    resolution, though in widescreen (16:9) so it looks nicer on 
-    modern systems.
-]]
-
--- push is a library that will allow us to draw our game at a virtual
--- resolution, instead of however large our window is; used to provide
--- a more retro aesthetic
---
+    Esta versão é construída para se parecer mais com o NES do que
+    as máquinas Pong originais ou o Atari 2600 em termos de
+    resolução, embora em widescreen (16: 9) para que fique mais
+    bonito em sistemas modernos.
+    ]] --
+-- push é uma biblioteca que nos permite desenhar o jogo em um ambiente virtual
+-- resolução, em vez do "tamanho" da janela;
+-- usado para uma estética mais retrô
 -- https://github.com/Ulydev/push
-push = require 'push' 
+push = require 'push'
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -34,47 +33,38 @@ VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT = 243
 
 --[[
-    Runs when the game first starts up, only once; used to initialize the game.
-]]
+É executado quando o jogo é iniciado pela primeira vez, apenas uma vez;]]
+
 function love.load()
-    -- use nearest-neighbor filtering on upscaling and downscaling to prevent blurring of text 
-    -- and graphics; try removing this function to see the difference!
+    -- definição do filtro nearest-neighbor.
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
-    -- initialize our virtual resolution, which will be rendered within our
-    -- actual window no matter its dimensions; replaces our love.window.setMode call
-    -- from the last example
-    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
-        fullscreen = false,
-        resizable = false,
-        vsync = true
-    })
+    -- Inicialize a resolução virtual.
+    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,
+                     {fullscreen = false, resizable = false, vsync = true})
 end
 
 --[[
-    Keyboard handling, called by LÖVE2D each frame; 
-    passes in the key we pressed so we can access.
-]]
+    Tratamento do teclado, chamado por LÖVE2D a cada quadro;
+    ]]
 function love.keypressed(key)
-    -- keys can be accessed by string name
+    -- As chaves podem ser acessadas passando strings com seu nome.
     if key == 'escape' then
-        -- function LÖVE gives us to terminate application
+        -- função LÖVE que encerrará a aplicação.
         love.event.quit()
     end
 end
 
 --[[
-    Called after update by LÖVE2D, used to draw anything to the screen, 
-    updated or otherwise.
-]]
+   Chamado após a atualização por LÖVE2D, usado para desenhar qualquer coisa na tela.]]
 function love.draw()
-    -- begin rendering at virtual resolution
+    -- Inicia a resolução virtual
     push:apply('start')
 
-    -- condensed onto one line from last example
-    -- note we are now using virtual width and height now for text placement
-    love.graphics.printf('Hello Pong!', 0, VIRTUAL_HEIGHT / 2 - 6, VIRTUAL_WIDTH, 'center')
+    -- Desenhe o texto de boas vindas na parte superior da tela
+    love.graphics.printf('Hello Pong!', 0, VIRTUAL_HEIGHT / 2 - 6,
+                         VIRTUAL_WIDTH, 'center')
 
-    -- end rendering at virtual resolution
+    -- Termina a resolução virtual
     push:apply('end')
 end

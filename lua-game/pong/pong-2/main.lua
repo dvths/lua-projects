@@ -35,12 +35,12 @@ VIRTUAL_HEIGHT = 243
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
-    -- uma font "retro-looking" que podemos usar para qualquer texto.
+    -- uma fonte "retro-looking" que podemos usar para qualquer texto.
     smallFont = love.graphics.newFont('font.ttf', 8)
 
     -- Definir a fonte ativa de LÖVE2D para o objeto smallFont
     love.graphics.setFont(smallFont)
-
+    -- Inicializar a resolução virtual
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,
                      {fullscreen = false, resizable = false, vsync = true})
 end
