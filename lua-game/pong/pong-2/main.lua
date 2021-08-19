@@ -1,29 +1,28 @@
 --[[
-    GD50 2018
-    Pong Remake
+    Autor: Tiago Henrique
+    tiagohs.dev@gmail.com
 
-    pong-2
-    "The Rectangle Update"
+    Exercício do curso de desenvolvimento de jogos
+    CS50 - Instrutor Colton Ogden - cogden@cd50.harvard.edu
 
-    -- Main Program --
+    Originalmente programado Nolan Bushnell e Ted Dabney
+    na forma de console ligado a um monitor movido a fichas,
+    "Pong" foi o primeiro game lucrativo da história dando
+    origem a fundação da empresa Atari, em 1972 e a um novo
+    setor da industria.
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
+    O game em duas dimensões, simula tênis de mesa onde dois
+    jogadores têm o objetivo de mandar a bola além da borda do
+    seu oponente. Vence o primeiro a marcar 10 pontos.
 
-    Originally programmed by Atari in 1972. Features two
-    paddles, controlled by players, with the goal of getting
-    the ball past your opponent's edge. First to 10 points wins.
-
-    This version is built to more closely resemble the NES than
-    the original Pong machines or the Atari 2600 in terms of
-    resolution, though in widescreen (16:9) so it looks nicer on 
-    modern systems.
-]]
-
--- push is a library that will allow us to draw our game at a virtual
--- resolution, instead of however large our window is; used to provide
--- a more retro aesthetic
---
+    Esta versão é construída para se parecer mais com o NES do que
+    as máquinas Pong originais ou o Atari 2600 em termos de
+    resolução, embora em widescreen (16: 9) para que fique mais
+    bonito em sistemas modernos.
+    ]] --
+-- push é uma biblioteca que nos permite desenhar o jogo em um ambiente virtual
+-- resolução, em vez do "tamanho" da janela;
+-- usado para uma estética mais retrô
 -- https://github.com/Ulydev/push
 push = require 'push'
 
@@ -33,67 +32,39 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT = 243
 
---[[
-    Runs when the game first starts up, only once; used to initialize the game.
-]]
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
-    -- more "retro-looking" font object we can use for any text
+    -- uma font "retro-looking" que podemos usar para qualquer texto.
     smallFont = love.graphics.newFont('font.ttf', 8)
 
-    -- set LÖVE2D's active font to the smallFont obect
+    -- Definir a fonte ativa de LÖVE2D para o objeto smallFont
     love.graphics.setFont(smallFont)
 
-    -- initialize window with virtual resolution
-    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
-        fullscreen = false,
-        resizable = false,
-        vsync = true
-    })
+    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,
+                     {fullscreen = false, resizable = false, vsync = true})
 end
 
---[[
-    Keyboard handling, called by LÖVE2D each frame; 
-    passes in the key we pressed so we can access.
-]]
-function love.keypressed(key)
-    -- keys can be accessed by string name
-    if key == 'escape' then
-        -- function LÖVE gives us to terminate application
-        love.event.quit()
-    end
-end
+function love.keypressed(key) if key == 'escape' then love.event.quit() end end
 
---[[
-    Called after update by LÖVE2D, used to draw anything to the screen, 
-    updated or otherwise.
-]]
 function love.draw()
-    -- begin rendering at virtual resolution
     push:apply('start')
 
-    -- clear the screen with a specific color; in this case, a color similar
-    -- to some versions of the original Pong
-    love.graphics.clear(40/255, 45/255, 52/255, 255/255)
-
-    -- draw welcome text toward the top of the screen
+    -- limpar a tela com a cor, nesse caso, procurei uma cor similar a do jogo original.
+    love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
     love.graphics.printf('Hello Pong!', 0, 20, VIRTUAL_WIDTH, 'center')
 
-    --
-    -- paddles are simply rectangles we draw on the screen at certain points,
-    -- as is the ball
-    --
+    -- As raquetes são simples retangulos desenhados de acordo com as cordenadas do plano 2D.
 
-    -- render first paddle (left side)
+    -- Renderizar a primeira raquete(lado esquerdo)
     love.graphics.rectangle('fill', 10, 30, 5, 20)
 
-    -- render second paddle (right side)
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 50, 5, 20)
+    -- Renderização da segunda raquete (lado direito)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 50, 5,
+                            20)
 
-    -- render ball (center)
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
-
-    -- end rendering at virtual resolution
+    -- Rnderização da bola (centro)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 2,
+                            VIRTUAL_HEIGHT / 2 - 2, 4, 4)
     push:apply('end')
 end
