@@ -9,7 +9,8 @@
     e paredes até passar um limite esquerdo ou direito da tela, marcando um ponto
     para o adversário.
 
-   ]] Ball = Class {}
+   ]] --
+Ball = Class {}
 
 function Ball:init(x, y, width, height)
     self.x = x

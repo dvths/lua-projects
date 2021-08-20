@@ -1,6 +1,30 @@
 --[[
-    GD50 2018
-    ]] push = require 'push'
+    Autor: Tiago Henrique
+    tiagohs.dev@gmail.com
+
+    Exercício do curso de desenvolvimento de jogos
+    CS50 - Instrutor Colton Ogden - cogden@cd50.harvard.edu
+
+    Originalmente programado Nolan Bushnell e Ted Dabney
+    na forma de console ligado a um monitor movido a fichas,
+    "Pong" foi o primeiro game lucrativo da história dando
+    origem a fundação da empresa Atari, em 1972 e a um novo
+    setor da industria.
+
+    O game em duas dimensões, simula tênis de mesa onde dois
+    jogadores têm o objetivo de mandar a bola além da borda do
+    seu oponente. Vence o primeiro a marcar 10 pontos.
+
+    Esta versão é construída para se parecer mais com o NES do que
+    as máquinas Pong originais ou o Atari 2600 em termos de
+    resolução, embora em widescreen (16: 9) para que fique mais
+    bonito em sistemas modernos.
+    ]] --
+-- push é uma biblioteca que nos permite desenhar o jogo em um ambiente virtual
+-- resolução, em vez do "tamanho" da janela;
+-- usado para uma estética mais retrô
+-- https://github.com/Ulydev/push
+push = require 'push'
 
 -- https://github.com/vrld/hump/blob/master/class.lua
 Class = require 'class'
