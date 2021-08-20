@@ -1,31 +1,28 @@
 --[[
-    GD50 2018
-    Pong Remake
+    -- Ball Class --
 
-    -- Paddle Class --
-
-    Author: Colton Ogden
+    Autor: Tiago Henrique
+    Cs50 GameDev - Instrutor Colton Ogden
     cogden@cs50.harvard.edu
 
-    Represents a paddle that can move up and down. Used in the main
-    program to deflect the ball back toward the opponent.
-]]
-
-Paddle = Class{}
+    Representa uma raquete que pode se mover para cima e para baixo.  Usado no principal.
+    programa para desviar a bola de volta para o adversário.
+]] --
+Ball = Class {}
+Paddle = Class {}
 
 --[[
-    The `init` function on our class is called just once, when the object
-    is first created. Used to set up all variables in the class and get it
-    ready for use.
+    A função `init` na classe é chamada apenas quando o objeto
+    é criado pela primeira vez. Usado para configurar todas as variáveis na classe e obtê-lo
+    pronto para uso.
+    A raquete deve ter um X e um Y, para o posicionamento, bem como uma largura
+    e altura para suas dimensões.
 
-    Our Paddle should take an X and a Y, for positioning, as well as a width
-    and height for its dimensions.
-
-    Note that `self` is a reference to *this* object, whichever object is
-    instantiated at the time this function is called. Different objects can
-    have their own x, y, width, and height values, thus serving as containers
-    for data. In this sense, they're very similar to structs in C.
-]]
+    Observe que `self` é uma referência a este objeto, qualquer que seja o objeto
+    instanciado no momento em que esta função é chamada.  Objetos diferentes podem
+    ter seus próprios valores de x, y, largura e altura, servindo assim como contêineres
+    para dados. Nesse sentido, são muito semelhantes às estruturas em C.
+    ]] --
 function Paddle:init(x, y, width, height)
     self.x = x
     self.y = y
@@ -35,28 +32,28 @@ function Paddle:init(x, y, width, height)
 end
 
 function Paddle:update(dt)
-    -- math.max here ensures that we're the greater of 0 or the player's
-    -- current calculated Y position when pressing up so that we don't
-    -- go into the negatives; the movement calculation is simply our
-    -- previously-defined paddle speed scaled by dt
+
+    -- math.max aqui garante o limite máximo entre 0 e player
+    -- posição atual de  Y  é calculada ao pressionar up para que não
+    -- vá para a parte negativa do eixo; o cálculo do movimento é simplesment
+    -- a velocidade da raquete (definida anteriormente) escalonada por dt
+
     if self.dy < 0 then
         self.y = math.max(0, self.y + self.dy * dt)
-    -- similar to before, this time we use math.min to ensure we don't
-    -- go any farther than the bottom of the screen minus the paddle's
-    -- height (or else it will go partially below, since position is
-    -- based on its top left corner)
+        -- desta vez usamos math.min para garantir que a raquete não vá além
+        -- da parte inferior da tela.
     else
         self.y = math.min(VIRTUAL_HEIGHT - self.height, self.y + self.dy * dt)
     end
 end
 
 --[[
-    To be called by our main function in `love.draw`, ideally. Uses
-    LÖVE2D's `rectangle` function, which takes in a draw mode as the first
-    argument as well as the position and dimensions for the rectangle. To
-    change the color, one must call `love.graphics.setColor`. As of the
-    newest version of LÖVE2D, you can even draw rounded rectangles!
-]]
+    Essa função será chamada na main em `love.draw`.
+    A função `rectangle` de LÖVE2D assume um modo de desenho como o primeiro
+    argumento, bem como a posição e as dimensões do retângulo.  Para mudar a cor,
+    deve-se chamar `love.graphics.setColor`. A partir de versão mais recente
+    do LÖVE2D, você pode até desenhar retângulos arredondados!
+    ]] --
 function Paddle:render()
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
