@@ -1,18 +1,16 @@
 --[[
-    GD50 2018
-    Pong Remake
-
     -- Ball Class --
 
-    Author: Colton Ogden
+    Autor: Tiago Henrique
+    Cs50 GameDev - Instrutor Colton Ogden
     cogden@cs50.harvard.edu
 
-    Represents a ball which will bounce back and forth between paddles
-    and walls until it passes a left or right boundary of the screen,
-    scoring a point for the opponent.
-]]
+    Representa uma bola que vai quicar para frente e para trás entre as raquetes
+    e paredes até passar um limite esquerdo ou direito da tela, marcando um ponto
+    para o adversário.
 
-Ball = Class{}
+   ]] --
+Ball = Class {}
 
 function Ball:init(x, y, width, height)
     self.x = x
@@ -20,15 +18,15 @@ function Ball:init(x, y, width, height)
     self.width = width
     self.height = height
 
-    -- these variables are for keeping track of our velocity on both the
-    -- X and Y axis, since the ball can move in two dimensions
+    -- essas variáveis são para manter o controle da velocidade em ambos os
+    -- eixos X e Y, uma vez que a bola pode se mover em duas dimensões
     self.dy = math.random(2) == 1 and -100 or 100
     self.dx = math.random(-50, 50)
 end
 
 --[[
-    Places the ball in the middle of the screen, with an initial random velocity
-    on both axes.
+    Coloca a bola no meio da tela, com uma velocidade inicial aleatória 
+    em ambos os eixos.
 ]]
 function Ball:reset()
     self.x = VIRTUAL_WIDTH / 2 - 2
@@ -38,13 +36,13 @@ function Ball:reset()
 end
 
 --[[
-    Simply applies velocity to position, scaled by deltaTime.
+    Simplesmente aplica a velocidade à posição, escalonada por DeltaTime. 
 ]]
 function Ball:update(dt)
     self.x = self.x + self.dx * dt
     self.y = self.y + self.dy * dt
 end
-
+-- Definimos um método que irá renderizar a bola na tela
 function Ball:render()
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
