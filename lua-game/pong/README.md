@@ -2,17 +2,17 @@
 
 ## Introdução
 
-Esse tutorial é faz parte de uma série de estudos pessoais sobre
+Esse tutorial faz parte de uma série de estudos pessoais sobre
 desenvolvimento de jogos e a linguagem de programação Lua. Para segui-lo
 é recomendável (mas não obrigatório) que você possua um conhecimento
 básico de programação e, de preferência, familiaridade com Lua e com o
 mínimo dos padrões de desenvolvimento de games.
 
-No decorrer do artigo compartilharei links para materiais de apoio úteis
-para a compreensão de certos conceitos. Tentarei ser o mais objetivo e
-claro possível e, o mais importante: estou aberto para esclarecer
-dúvidas e receber sugestões de melhorias! Ficarei muito feliz em trocar
-ideias com pessoas que possam me ajudar a melhorar minhas habilidades.
+No decorrer do artigo compartilharei materiais de apoio úteis para a
+compreensão de certos conceitos. Tentarei ser o mais objetivo e claro
+possível e, o mais importante: estou aberto para esclarecer dúvidas e
+receber sugestões de melhorias! Ficarei muito feliz em trocar ideias com
+pessoas que possam me ajudar a melhorar minhas habilidades.
 
 Por fim, vou assumir que você está desenvolvendo em um sistema Linux. Eu
 uso Arch Linux e há anos não uso Windowns ou Mac para além do
@@ -98,8 +98,42 @@ Dito isso, vamos lá:
 
 -   Em seguida, faça um clone do repositório que eu deixei no jeito para
     você estudá-lo e acompanhar com mais facilidade o tutorial:
+    -   Se quiser clonar o repositório com todos os projetos use git
+        clone normalmente.
 
-    -   \[link do repo\]
+    -   Se quiser copiar apenas os arquivos desse turorial siga esses
+        passos:
+
+    ```{=html}
+    <!-- -->
+    ```
+        $ mkdir pong
+        $ cd pong
+        $ git init
+        $ git remote add -f https://github.com/DVths/lua-projects.git
+
+    -   Isso cria um repositório remoto vazio e busca todos os objetos,
+        mas não os verifica. Então faça:
+
+    ``` bash
+    $ git config core.sparseCheckout true
+    ```
+
+    -   Agora defina quais arquivos/pastas você deseja fazer check-out.
+        Isso é feito listando-os em .git/info/sparse-checkout, por
+        exemplo:
+
+    ``` bash
+    $ echo "lua-game/pong/" >> .git/info/sparse-checkout
+    ```
+
+    -   Finalmente, atualize seu repositório vazio com o estado do
+        repositório remoto:
+
+    ```{=html}
+    <!-- -->
+    ```
+        $ git pull origin main
 
 ## Por que Lua?
 
@@ -599,7 +633,8 @@ e, em seguida, exibimos a pontuação de cada jogador em seu lado da tela.
 -   `os.time()`
     -   Esta também é uma função da biblioteca padrão de Lua. Retorna,
         em segundos, o horário desde 00:00:00 UTC, de 1º de janeiro de
-        1970, também conhecido como [Unix epoch time](https://en.wikipedia.ord/wiki/Unix_time).
+        1970, também conhecido como [Unix epoch
+        time](https://en.wikipedia.ord/wiki/Unix_time).
 -   `math.random(min, max)`
     -   Esta função retorna um número aleatório, dependente do gerador
         de número aleatório propagado, entre `min`e `max`, inclusive.
@@ -612,34 +647,31 @@ e, em seguida, exibimos a pontuação de cada jogador em seu lado da tela.
 
 -   Você encontrará a primeira adição ao código no início de
     `love.load()`:
-```lua
+
+``` lua
         math.randomseed(os.time())
 ```
 
+Isso semeia o gerador de números aleatórios, usando a hora atual para
+garantir números aleatórios diferentes a cada vez que o jogo é
+executado. Além disso, você verá algumas novas variáveis perto do final
+do `love.load()`:
 
-Isso semeia o gerador de números aleatórios, usando a hora atual
-    para garantir números aleatórios diferentes a cada vez que o jogo é
-    executado. Além disso, você verá algumas novas variáveis perto do
-    final do `love.load()`:
+``` lua
+     ballX = VIRTUAL_WIDTH / 2 - 2
+     ballY = VIRTUAL_HEIGHT / 2 - 2
 
-   ``` lua
-        ballX = VIRTUAL_WIDTH / 2 - 2
-        ballY = VIRTUAL_HEIGHT / 2 - 2
+     ballDX = math.random(2) == 1 and 100 or -100
+     ballDY = math.random(-50, 50)
 
-        ballDX = math.random(2) == 1 and 100 or -100
-        ballDY = math.random(-50, 50)
+     gameState = 'start'
+```
 
-        gameState = 'start'
-
- ```
-
-  
-  `ballX` e `ballY` manterá o controle da posição da bola, enquanto
-    `ballDX` e `ballDY` irá acompanhar a velocidade da bola.
-    `gameState`servirá como uma "[State
-    Machine](https://gameprogrammingpatterns.com/state.html)"
-    rudimentar, que controlará os diferentes estados do jogo (iniciar,
-    jogar, etc.)
+`ballX` e `ballY` manterá o controle da posição da bola, enquanto
+`ballDX` e `ballDY` irá acompanhar a velocidade da bola.
+`gameState`servirá como uma "[State
+Machine](https://gameprogrammingpatterns.com/state.html)" rudimentar,
+que controlará os diferentes estados do jogo (iniciar, jogar, etc.)
 
 -   Em `love.update()`, ajustamos nosso código para o movimento da
     raquete envolvendo-o em torno das funções `math.max()` e `math.min`
@@ -1054,8 +1086,8 @@ organizar amostras.
 
 -   Você notará em `love.load()`que crie uma tabela com referências aos
     3 arquivos de som que adicionei ao diretório do projeto:
-```lua
 
+``` lua
         sounds = {
             ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
             ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
@@ -1063,11 +1095,10 @@ organizar amostras.
         }
 ```
 
--  Neste caso, armazenei cada som como um arquivo de áudio
-     "estático" devido ao seu tamanho pequeno. No futuro, se estiver
-      usando arquivos de áudio maiores, você pode considerar
-    armazená-los como arquivos de "fluxo" de áudio para salvá-los na
-        memória.
+-   Neste caso, armazenei cada som como um arquivo de áudio "estático"
+    devido ao seu tamanho pequeno. No futuro, se estiver usando arquivos
+    de áudio maiores, você pode considerar armazená-los como arquivos de
+    "fluxo" de áudio para salvá-los na memória.
     -   Você deve ser capaz de encontrar no resto do `main.lua` as
         chamadas de função como `sounds['paddle_hit']:play()`em locais
         correspondentes para tocar som em colisões com as
@@ -1116,16 +1147,16 @@ E com isso, temos um jogo de Pong em pleno funcionamento!
 
 Com esse programa simples que simula um dos jogos mais famosos de todos
 os tempos, conseguimos analisar pontos básicos e fundamentais do
-desenvolvimento de jogos. 
+desenvolvimento de jogos.
 
-Passamos por conceitos como DeltaTime, State
-Machine, Detecção de Colisão, Interpolação de imagem e um pouco de
-Álgebra Linear para computação gráfica. 
+Passamos por conceitos como DeltaTime, State Machine, Detecção de
+Colisão, Interpolação de imagem e um pouco de Álgebra Linear para
+computação gráfica.
 
-Também vimos como definir o escopo de um projeto e implementar
-esses conceitos em linguagem Lua, uma linguagem amplamente utilizada no desenvolvimento de games, fácil de aprender,
-leve e rápida como o game engine Löve2D, que nos permite uma experiência
-completa para prototipar jogos em duas dimensões. 
+Também vimos como definir o escopo de um projeto e implementar esses
+conceitos em linguagem Lua, uma linguagem amplamente utilizada no
+desenvolvimento de games, fácil de aprender, leve e rápida como o game
+engine Löve2D, que nos permite uma experiência completa para prototipar
+jogos em duas dimensões.
 
-Espero que tenha se
-divertido!
+Espero que tenha se divertido!
