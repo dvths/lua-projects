@@ -2,7 +2,7 @@
 
 ## Introdução
 
-Esse tutorial faz parte de uma série de estudos pessoais sobre
+Este tutorial faz parte de uma série de estudos pessoais sobre
 desenvolvimento de jogos e a linguagem de programação Lua. Para segui-lo
 é recomendável (mas não obrigatório) que você possua um conhecimento
 básico de programação e, de preferência, familiaridade com Lua e com o
@@ -102,7 +102,7 @@ Dito isso, vamos lá:
     -   Se quiser clonar o repositório com todos os projetos use git
         clone normalmente.
 
-    -   Se quiser copiar apenas os arquivos desse turorial siga esses
+    -   Se quiser copiar apenas os arquivos desse turorial, siga esses
         passos:
 
     ``` bash
