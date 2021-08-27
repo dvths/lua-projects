@@ -11,8 +11,8 @@ Esse repositório trará diversos projetos divididos em outros
 subdiretórios. É provável que você não precise clonar todos os arquivos,
 mas apenas aqueles que te interessam.
 
-Uma maneira simples de clonar um repositório específico é fazendo um
-sparse checkout: Vamos supor que você queira clonar apenas o projeto
+Uma maneira simples de clonar um subdiretório específico é fazendo um
+`sparse checkout`: Vamos supor que você queira clonar apenas o projeto
 "pong", dentro de "lua-game":
 
 -   crie uma pasta para o *pong* e dentro dela inicie uma sessão do git.

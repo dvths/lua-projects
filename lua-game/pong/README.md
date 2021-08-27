@@ -98,19 +98,19 @@ Dito isso, vamos lá:
 
 -   Em seguida, faça um clone do repositório que eu deixei no jeito para
     você estudá-lo e acompanhar com mais facilidade o tutorial:
+
     -   Se quiser clonar o repositório com todos os projetos use git
         clone normalmente.
 
     -   Se quiser copiar apenas os arquivos desse turorial siga esses
         passos:
 
-    ```{=html}
-    <!-- -->
+    ``` bash
+      $ mkdir pong
+      $ cd pong
+      $ git init
+      $ git remote add -f https://github.com/DVths/lua-projects.git
     ```
-        $ mkdir pong
-        $ cd pong
-        $ git init
-        $ git remote add -f https://github.com/DVths/lua-projects.git
 
     -   Isso cria um repositório remoto vazio e busca todos os objetos,
         mas não os verifica. Então faça:
@@ -130,12 +130,11 @@ Dito isso, vamos lá:
     -   Finalmente, atualize seu repositório vazio com o estado do
         repositório remoto:
 
-    ```{=html}
-    <!-- -->
-    ```
+    ``` bash
         $ git pull origin main
+    ```
 
-## Por que Lua?
+    ## Por que Lua?
 
 -   Lua foi criada em 1993 aqui no Brasil e se destina ao uso embutido
     em em grandes aplicações. Por ser extremamente leve e rápida, desde
